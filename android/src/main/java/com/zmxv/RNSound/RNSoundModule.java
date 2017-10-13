@@ -104,8 +104,6 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
     if (res != 0) {
       Log.i("MediaPlayer","MediaPlayer created here");
       Log.i("Filename", "Filename is " + fileName);
-//      MediaPlayer mediaplayer = MediaPlayer.create(this.context, res);
-//      mediaplayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
       MediaPlayer mp = new MediaPlayer();
       mp.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
       try {
@@ -121,7 +119,6 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
         Log.e("RNSoundModule", "Exception", e);
         return null;
       }
-      //return MediaPlayer.create(this.context, res);
     }
     if(fileName.startsWith("http://") || fileName.startsWith("https://")) {
       MediaPlayer mediaPlayer = new MediaPlayer();
@@ -148,10 +145,6 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void play(final Integer key, final Callback callback) {
     AudioManager audio = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-    float curNotifVolume = audio.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
-    float maxNotifVolume = audio.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
-    float volume = curNotifVolume / maxNotifVolume;
-    Log.i("Volume", "Volume " + volume);
     switch(audio.getRingerMode()) {
       case AudioManager.RINGER_MODE_NORMAL:
         MediaPlayer player = this.playerPool.get(key);
@@ -189,14 +182,10 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
             return true;
           }
         });
-        player.setVolume(volume, volume);
-        Log.i("Volume", "Volume was changed " + volume);
         player.start();
         break;
       case AudioManager.RINGER_MODE_SILENT:
-        break;
-      case AudioManager.RINGER_MODE_VIBRATE:
-        // vibrate
+        return;
         break;
       default:
         return;
