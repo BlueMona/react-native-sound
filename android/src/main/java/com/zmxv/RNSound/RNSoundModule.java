@@ -185,7 +185,6 @@ public class RNSoundModule extends ReactContextBaseJavaModule {
         player.start();
         break;
       case AudioManager.RINGER_MODE_SILENT:
-        return;
         break;
       default:
         return;
